@@ -1,0 +1,10 @@
+<h2>Make a bet for Blackjack game.</h2>
+
+<p><%= session[:player_name]%> has $<%= session[:player_balance].to_i %>.</P>
+<form id="make_bet" action="/game/make_bet" method="post">
+  <div class="input-group col-xs-6 col-sm-4">
+    <span class="input-group-addon">$</span>
+    <input type="text" class="form-control" placeholder="amount" name="amount">
+  </div>
+
+</form>

@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My First App</title>
+    <title>My First Sinatra App</title>
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/application.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/application.js"></script>
   </head>
-  <body style="padding-top: 50px;">
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-            <ul class="nav">
-              <li><a href="/">Nav Item</a></li>
-            </ul>
-        </div>
-      </div>
-    </div>
 
   <div class="container">
+
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Blackjack</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/new_player">Start Over</a></li>
+        <p class="navbar-text">
+          Welcome <%= session[:player_name] %>.
+        </p>
+      <ul>
+    </nav>
+
     <%if @error %>
       <div class="alert alert-warning">
         <%=@error%>
@@ -28,8 +32,9 @@
         <%=@success%>
       </div>
     <% end %>
-
+    <div class='container'>
       <%= yield %>
+    </div>
   </div>
   </body>
 </html>

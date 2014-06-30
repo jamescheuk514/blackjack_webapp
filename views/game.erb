@@ -1,34 +1,91 @@
-<h1>Blackjack!</h1>
-
-<p>Welcome <%= session[:player_name] %>.</p>
-
-
-Dealer's cards:
-<ul>
-  <% session[:dealer_cards].each do |card| %>
-    <li><%= card.to_s %></li>
+<div id="game">
+  <%if @loser %>
+    <div class="alert alert-warning">
+      <%=@loser%>
+    </div>
   <% end %>
-</ul>
-
-<br/>
-
-Player's cards:
-<ul>
-  <% session[:player_cards].each do |card| %>
-    <li><%= card.to_s %></li>
+  <%if @winner %>
+    <div class="alert alert-success">
+      <%=@winner %>
+    </div>
   <% end %>
-</ul>
 
-<p>
-  What would you choose to do?<br/>
-  <%= session[:player_name] %> has
-  <%= cal_total(session[:player_cards]) %>
-  <% if @show_hit_or_stay_btn %>
-    <form action="/game/player/hit" method='post'>
-      <input type="submit" class="btn" value="Hit" />
-    </form>
-    <form action="/game/player/stay" method='post'>
-      <input type="submit" class="btn" value="Stay" />
-    </form>
+  <% if @play_again %>
+    <% if session[:player_balance] > 0 %>
+      <p>
+        <strong>Play again?</strong>
+        <a href="/bet" class="btn btn-primary">Yes</a>
+        <a href="/game_over" class="btn btn-warning">No</a>
+      </p>
+    <% else %>
+      <p>
+        <strong>You just lost all money. GAME OVER</strong>
+        <a href="/new_player" class="btn btn-warning">Restart</a>
+      </p>
+    <% end %>
   <% end %>
-</p>
+
+
+  <div class="panel panel-info" id="dealer_area">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Dealer's cards:</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+        <% session[:dealer_cards].each_with_index do |card, index| %>
+          <% if session[:turn] != "dealer" && index == 0 %>
+            <li><img src="/images/cards/cover.jpg" class="card_image"></li>
+          <% else %>
+            <li><%= card_image(card) %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <section>
+    <p>
+      <% if @show_dealer_hit_btn %>
+        <form id="dealer_hit_form" action="/game/dealer/hit" method="post">
+          <input type="submit" class="btn btn-primary" value="Click to find out dealer's card">
+        </form>
+      <% end %>
+    </p>
+  </section>
+  <br/>
+
+
+  <div class="panel panel-info" id="player_area">
+    <div class="panel-heading">
+      <h3 class="panel-title">Player's cards:</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+        <% session[:player_cards].each do |card| %>
+          <li><%= card_image(card) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <section>
+    <p>
+      What would you choose to do?<br/>
+      <%= session[:player_name] %> has
+      <%= cal_total(session[:player_cards]) %>
+    </p>
+    <h4>
+
+      You have $<%= session[:player_balance]%> and going to bet $<%= session[:per_bet] %> for this round.
+    </h4>
+    <% if @show_hit_or_stay_btn %>
+      <form id="hit_form" action="/game/player/hit" method='post'>
+        <input type="submit" class="btn btn-success" value="Hit">
+      </form>
+      <form id="stay_form" action="/game/player/stay" method='post'>
+        <input type="submit" class="btn btn-warning" value="Stay">
+      </form>
+    <% end %>
+
+  </section>
+</div>
