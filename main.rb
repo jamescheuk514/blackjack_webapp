@@ -105,7 +105,7 @@ end
 post '/game/make_bet' do
   amount = params[:amount]
   balance = session[:player_balance]
-  if amount.nil? || amount.to_i == 0
+  if amount.nil? || amount.to_i <= 0
     @error = "Must be a bit."
     halt erb(:bet)
   elsif amount.to_i > balance
@@ -181,12 +181,12 @@ end
 get '/game/compare' do
   player_total = cal_total(session[:player_cards])
   dealer_total = cal_total(session[:dealer_cards])
-  @show_dealer_hit_btn = false
+
 
   if player_total > dealer_total
-    loser!("#{session[:player_name]} stayed at #{player_total}, and dealer stayed at #{dealer_total}.")
-  elsif dealer_total > player_total
     winner!("#{session[:player_name]} stayed at #{player_total}, and dealer stayed at #{dealer_total}")
+  elsif dealer_total > player_total
+    loser!("#{session[:player_name]} stayed at #{player_total}, and dealer stayed at #{dealer_total}.")
   else
     tie!("Both #{session[:player_name]} and dealer stayed at #{player_total}")
   end
